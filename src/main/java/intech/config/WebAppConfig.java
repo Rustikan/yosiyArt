@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan("intech.controller")
+@ComponentScan("intech")
 public class WebAppConfig {
 
     @Bean

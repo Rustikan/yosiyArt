@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/rs/orgs")
@@ -17,13 +19,16 @@ public class TestAnsController {
 
     @RequestMapping(value = "/01/invts/force", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public List<EmployeeAns> registerEmployes(@RequestBody ArrayList<Employee> employes) {
+    public Object registerEmployes(@RequestBody ArrayList<Employee> employes) {
         List lst = new ArrayList();
-        System.out.println("123");
+
         for (Employee e : employes) {
             lst.add(new EmployeeAns(e.getSnils(), "success"));
         }
-
-        return lst;
+        System.out.println("ans -> " + lst);
+        Map mav = new HashMap();
+        mav.put("message", "Partial success");
+        mav.put("results", lst);
+        return mav;
     }
 }

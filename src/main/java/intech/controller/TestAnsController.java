@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/rs/orgs")
+@RequestMapping("/yosiyArt_war/rs/orgs")
 public class TestAnsController {
 
     @RequestMapping(value = "/01/invts/force", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public Object registerEmployes(@RequestBody ArrayList<Employee> employes) {
+        System.out.println("ans -> " + employes);
         List lst = new ArrayList();
 
         for (Employee e : employes) {

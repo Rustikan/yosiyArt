@@ -2,10 +2,10 @@ package intech.service.impl;
 
 import intech.model.Employee;
 import intech.model.EmployeeAns;
+import intech.service.WorkExcellService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,9 +17,8 @@ import java.util.List;
  * Формирование отчета по итогам
  *
  */
-@Service
-@Component
-public class WorkExcellServiceImpl {
+@Service("workExcellService")
+public class WorkExcellServiceImpl implements WorkExcellService{
 
     public List<Employee> getEmployesFromExcell(Workbook workbook){
         List list=new ArrayList();

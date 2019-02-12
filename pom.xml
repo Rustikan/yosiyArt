@@ -9,8 +9,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <properties>
-        <javax.servlet>3.0.1</javax.servlet>
-        <spring.version>3.2.6.RELEASE</spring.version>
+        <javax.servlet>3.1.0</javax.servlet>
+        <spring.version>4.3.9.RELEASE</spring.version>
+        <jackson.version>2.7.8</jackson.version>
     </properties>
 
     <distributionManagement>
@@ -43,15 +44,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>

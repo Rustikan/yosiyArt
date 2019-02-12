@@ -19,10 +19,11 @@ public class WebAppConfig {
     public UrlBasedViewResolver setupViewResolver() {
         UrlBasedViewResolver resolver = new UrlBasedViewResolver();
         // указываем где будут лежать наши веб-страницы
-        resolver.setPrefix("/");
+        resolver.setPrefix("/webapp/");
         // формат View который мы будем использовать
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
+        resolver.setContentType("text/html; charset=utf-8");
 
         return resolver;
     }

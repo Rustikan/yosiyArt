@@ -1,32 +1,47 @@
 package intech.controller;
 
-import intech.model.Employee;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import intech.model.EmployeeAns;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequestMapping("/yosiyArt_war/rs/orgs")
 public class TestAnsController {
 
-    @RequestMapping(value = "/01/invts/force", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = {"/{orgId}/invts/force", "/{orgId}/rcs/{orgId}//invts/force"}, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public Object registerEmployes(@RequestBody ArrayList<Employee> employes) {
-        System.out.println("ans -> " + employes);
-        List lst = new ArrayList();
+    public Object registerEmployes(@PathVariable(value = "orgId") String orgId,
+                                   @RequestParam(value = "rcOid", required = false) String rcOid,
+                                   @RequestBody String employes) {
+        List<LinkedHashMap> employees = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
 
-        for (Employee e : employes) {
-            lst.add(new EmployeeAns(e.getSnils(), "success"));
+            employees = mapper.readValue(employes, List.class);
+
+            System.out.println(employees);
+//            JsonNode actualObj = mapper.readTree(employes);
+//            System.out.println(actualObj);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println("ans -> " + lst);
+
+        List lst = new ArrayList();
+        int i = 0;
+        for (LinkedHashMap e : employees) {
+            i++;
+            String message = "success";
+            if (i % 5 == 0) {
+                message = "not success";
+            }
+            lst.add(new EmployeeAns(e.get("snils").toString(), message));
+        }
+        System.out.println("---------------  " + lst.size());
+
         Map mav = new HashMap();
         mav.put("message", "Partial success");
         mav.put("results", lst);

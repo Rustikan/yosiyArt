@@ -11,7 +11,7 @@
     var fileName;
 
     var RestPost = function () {
-        var f1=$('#files');
+        var f1 = $('#files');
         fileName = $('#files')[0].files[0];
 
         var reader = new FileReader();
@@ -30,25 +30,59 @@
                     result = roa;
                 }
             });
+
+            var savefileName = "excel.xlsx";
             $.ajax({
                 type: 'POST',
                 url: prefix + '/post',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(result),
-                dataType: 'json',
                 async: true,
-                success: function (result) {
+                success: function (responce, status, xhr) {
+                    var blob = responce.substring(1, responce.length - 1);
+                    console.log(1, blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        console.log(33333333);
+                        window.navigator.msSaveBlob(blob, savefileName);
+                    } else {
+                        console.log(44444444444);
+                        var downloadLink = window.document.createElement('a');
+                        var contentTypeHeader = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"//xhr.getResponseHeader("content-type");
+                        downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
+                        downloadLink.download = savefileName;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.status + ' ' + jqXHR.responseText);
+                    console.log(jqXHR);
+
+                    var blob = jqXHR.responseText;
+                    console.log(blob);
+
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        console.log(33333333);
+                        window.navigator.msSaveBlob(blob, savefileName);
+                    } else {
+                        console.log(44444444444);
+                        var downloadLink = window.document.createElement('a');
+                        var contentTypeHeader = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"//xhr.getResponseHeader("content-type");
+                        downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
+                        downloadLink.download = savefileName;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    }
+                    //alert(jqXHR.status + ' ' + jqXHR.responseText);
                 }
             });
-            console.log(result);
         };
         reader.readAsArrayBuffer(fileName);
     }
 
     function handleFile(e) {
+        console.log(e);
         //Get the files from Upload control
         var files = e.target.files;
         var i, f;
@@ -70,20 +104,8 @@
                         result = roa;
                     }
                 });
-                $.ajax({
-                    type: 'POST',
-                    url: prefix + '/post',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(result),
-                    dataType: 'json',
-                    async: true,
-                    success: function (result) {
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(jqXHR.status + ' ' + jqXHR.responseText);
-                    }
-                });
                 console.log(result);
+                $('#restText').val(JSON.stringify(result));
             };
             reader.readAsArrayBuffer(f);
         }
@@ -114,18 +136,52 @@
     //Change event to dropdownlist
     $(document).ready(function () {
         fileName = handleFile.target;
-//        $('#files').change(handleFile);
+        $('#files').change(handleFile);
     });
 </script>
 
 <body>
 
-<h3>Это простой пример </h3>
+<h3>Регистрация сотрудников на ГосУслугах</h3>
 
-<button type="button" onclick="RestPost()">Метод POST</button>
-<button type="button" onclick="RestPost2()">Метод POST2</button>
-<input type="file" id="files" name="files"/>
-
+<form action="/yosiyArt_war/post" method="post">
+    <input type="text" id="restText" name="restText" hidden="true"/>
+    <input type="file" id="files" name="files"/>
+    <br>
+    <br>
+    <label> Хост: </label>
+    <input type="text" id="host" name="host" value="http://localhost:8081/yosiyArt_war"/>
+    <%--<input type="text" id="host" name="host" value="https://esia-portal1.test.gosuslugi.ru"/>--%>
+    <br>
+    <br>
+    <label>ИД организации</label>
+    <input type="text" id="orgId" name="orgId" value="1000000001"/>
+    <br>
+    <br>
+    <label>ИД ЦО</label>
+    <input type="text" id="rcOid" name="rcOid" value="01"/>
+    <br>
+    <br>
+    <label>Логин:</label>
+    <input type="text" id="login" name="login" value="arinochkaselezneva@yandex.ru"/>
+    <br>
+    <br>
+    <label>Пароль:</label>
+    <input type="text" id="password" name="password" value="qwertyui12345"/>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-2 text-center">
+            <input type="submit" class="btn btn-success" id="btnPostEmpl" name="btnPostEmpl"
+                   value="Отправить запрос на регистрацию сотрудников"/>
+        </div>
+        <br>
+        <div class="col-md-2 text-center">
+            <input type="submit" class="btn btn-success" id="btnPostToOrg" name="btnPostToOrg"
+                   value="Отправить запрос на прикрепление сотрудников"/>
+        </div>
+    </div>
+</form>
 
 </body>
 </html>

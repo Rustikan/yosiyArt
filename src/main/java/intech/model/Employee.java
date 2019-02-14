@@ -11,15 +11,17 @@ public class Employee {
     private String surname;
     private String middleName;
     private String snils;
+    private String message;
 
     public Employee() {
     }
 
-    public Employee(String name, String surname, String middleName, String snils) {
+    public Employee(String name, String surname, String middleName, String snils, String message) {
         this.name = name;
         this.surname = surname;
         this.middleName = middleName;
         this.snils = snils;
+        this.message = message;
     }
 
     public String getName() {
@@ -52,5 +54,23 @@ public class Employee {
 
     public void setSnils(String snils) {
         this.snils = snils;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", snils='" + snils + '\'' +
+                '}';
     }
 }

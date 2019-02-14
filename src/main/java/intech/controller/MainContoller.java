@@ -1,26 +1,20 @@
 package intech.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import intech.model.Employee;
 import intech.model.EmployeeAns;
 import intech.service.WorkExcellService;
 import intech.view.RepostEsiaView;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,37 +33,93 @@ public class MainContoller {
     @Autowired
     WorkExcellService excellService;
 
-    @PostMapping(value = "/post", produces = "application/json")
-    public ModelAndView postMyData(@RequestBody ArrayList<Employee> lst,
-                                   HttpServletRequest request) {
-        System.out.println("POST 1 8======>" + lst);
-//        ArrayList lst = (ArrayList) excellService.getEmployesFromExcell(new HSSFWorkbook());
-        //впихнем данные, здесь должен быть сервис, который загрузит в массив сотрудников из файла
+    @Autowired
+    RestTemplate restTemplate;
 
-        ModelAndView model = new ModelAndView();
+    @PostMapping(value = "/post")
+    public ModelAndView postMyData(@RequestParam(value = "restText") String restText,
+                                   @RequestParam(value = "host") String host,
+                                   @RequestParam(value = "orgId") String orgId,
+                                   @RequestParam(value = "rcOid", required = false) String rcOid,
+                                   @RequestParam(value = "login") String login,
+                                   @RequestParam(value = "password") String password,
+                                   @RequestParam(value = "btnPostEmpl", required = false) String btnPostEmpl,
+                                   @RequestParam(value = "btnPostToOrg", required = false) String btnPostToOrg
+    ) {
 
-        final RestTemplate restTemplate = new RestTemplate();
+        List<Employee> employees = new ArrayList<>();
+        host = (host == null || host.isEmpty()) ? "https://esia-portal1.test.gosuslugi.ru" : host;
+//        ObjectMapper mapper = new ObjectMapper();
+//        try {
+//            employees = mapper.readValue(restText, new TypeReference<List<Employee>>(){});
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
+//        final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        final HttpEntity<ArrayList<Employee>> entity = new HttpEntity<>(lst);
-        String urlPost = "http://localhost:8081/yosiyArt_war" + "/rs/orgs/01/invts/force";
-        ResponseEntity e2 = restTemplate.exchange(urlPost, HttpMethod.POST, entity, Object.class);
+        final HttpEntity<String> entity = new HttpEntity<>(restText);
 
-        System.out.println("POST 2 8======>" + e2);
+        String urlPost = host + "/rs/orgs/" + orgId + ((btnPostToOrg != null && !btnPostToOrg.isEmpty()) ? "/rcs/" + rcOid : "") + "/invts/force";
+
+        ResponseEntity e2 = restTemplate.exchange(urlPost, HttpMethod.POST, entity, String.class);
 
         Map body = new HashMap();
         List<EmployeeAns> ans = new ArrayList<>();
         if (e2 != null && e2.getBody() != null && e2.getBody() instanceof Map)
             body = (Map) e2.getBody();
 
-        ans = body.get("results") != null ? (List<EmployeeAns>) body.get("results") : null;
+//        ans = body.get("results") != null ? (List<EmployeeAns>) body.get("results") : null;
 
+        Object o1 = e2.getBody();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = null;
+        JsonNode jsonNodeAns = null;
+        try {
+            jsonNode = objectMapper.readTree(restText);
+            jsonNodeAns = objectMapper.readTree(o1.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JsonNode messageNode = jsonNodeAns.get("message");
+        JsonNode ansNode = jsonNodeAns.get("results");
+
+        Map<String, String> ansMap = new HashMap<>();
+
+        for (int i = 0; i < ansNode.size(); i++) {
+
+            JsonNode answer = ansNode.get(i);
+            ansMap.put(answer.get("snils").textValue(), answer.get("message").textValue());
+        }
+
+
+        System.out.println("POST 1 8======>" + ansMap.size());
+        String snils = "";
+        for (int i = 0; i < jsonNode.size(); i++) {
+            JsonNode startNode = jsonNode.get(i);
+
+            snils = startNode.get("snils").textValue();
+
+            String name = startNode.get("name").textValue();
+            String surname = startNode.get("surname").textValue();
+            String middlename = startNode.get("middlename").textValue();
+            String message = ansMap.get(snils);
+            employees.add(new Employee(name, surname, middlename, snils, message));
+        }
+
+
+        ModelAndView model = new ModelAndView();
+        model.addObject("empl", employees);
         model.setView(new RepostEsiaView());
-        System.out.println("POST 1 8======>" + model);
+        //System.out.println("POST 1 8======>" + model);
         return model;
     }
 
-    @PostMapping(value = "/readExcel")
+    /*@PostMapping(value = "/readExcel")
     public Object readExcel(@RequestParam("result") MultipartFile uploadItem, ModelAndView model,
                             HttpServletResponse response) {
         List<Employee> employees = new ArrayList<>();
@@ -99,5 +149,5 @@ public class MainContoller {
             return model.addObject("The File is not Excel format");
         }
         return employees;
-    }
+    }*/
 }

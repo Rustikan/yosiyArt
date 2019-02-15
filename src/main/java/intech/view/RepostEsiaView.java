@@ -20,7 +20,7 @@ public class RepostEsiaView extends AbstractXlsxView {
     @Override
     protected void buildExcelDocument(Map<String, Object> map, Workbook workbook, HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         //response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
+        response.setHeader("Content-Disposition", "attachment;filename=reportGosUs.xlsx");
 
         Sheet sheet = workbook.createSheet("Отчет");
         Sheet sheet2 = workbook.createSheet("Отчет по неудачным");
@@ -42,17 +42,34 @@ public class RepostEsiaView extends AbstractXlsxView {
         sheet2.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
 
         List<Employee> employees = (List<Employee>) map.get("empl");
-        System.out.println("{ | } - > "+ employees.size());
+        int notLoad=0;
+        System.out.println("{ | } - > " + employees.size());
+        rowindex=3;
         if (employees != null && !employees.isEmpty()) {
 
             for (Employee employee : employees) {
                 rowindex = createRowToSheet(sheet, rowindex, employee);
 
-                if (!"success".equals(employee.getMessage()))
+                if (!"success".equals(employee.getMessage())){
+                    notLoad++;
                     rowindex2 = createRowToSheet(sheet2, rowindex2, employee);
-
+                }
             }
         }
+
+        row = sheet.createRow(1);
+        cell = row.createCell(0);
+        cell.setCellValue("Всего сотрудников:");
+
+        cell = row.createCell(1);
+        cell.setCellValue(employees.size());
+
+        row = sheet.createRow(2);
+        cell = row.createCell(0);
+        cell.setCellValue("Из них не загружено: ");
+
+        cell = row.createCell(1);
+        cell.setCellValue(notLoad);
     }
 
     private void setCellWidth(Sheet sheet) {

@@ -4,8 +4,8 @@
     <title>Йоська</title>
 </head>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+<script src="/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/js/xlsx.core.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     var prefix = '/yosiyArt_war';
     var fileName;
@@ -180,6 +180,16 @@
             <input type="submit" class="btn btn-success" id="btnPostToOrg" name="btnPostToOrg"
                    value="Отправить запрос на прикрепление сотрудников"/>
         </div>
+    </div>
+</form>
+
+<form action="/yosiyArt_war/get" method="get">
+
+    <input type="text" id="hostGet" name="hostGet" value="https://esia-portal1.test.gosuslugi.ru"/>
+    <br>
+    <div class="col-md-2 text-center">
+        <input type="submit" class="btn btn-success" id="btnGetEmpl" name="btnGettEmpl"
+               value="Отправить запрос"/>
     </div>
 </form>
 

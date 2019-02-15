@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
@@ -27,7 +29,7 @@ import java.security.cert.CertificateException;
 @Configuration
 @EnableWebMvc
 @ComponentScan("intech")
-public class WebAppConfig {
+public class WebAppConfig extends WebMvcConfigurerAdapter{
 
     @Bean
     public UrlBasedViewResolver setupViewResolver() {
@@ -75,5 +77,10 @@ public class WebAppConfig {
         httpRequestFactory.setHttpClient(httpClient);
 
         return new RestTemplate(httpRequestFactory);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }
 }

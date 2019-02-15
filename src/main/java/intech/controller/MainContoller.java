@@ -9,6 +9,7 @@ import intech.view.RepostEsiaView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -150,4 +151,21 @@ public class MainContoller {
         }
         return employees;
     }*/
+
+
+    @GetMapping(value = "/get")
+    public Object getMyHost(@RequestParam(value = "hostGet") String host) {
+
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        final HttpEntity<String> entity = new HttpEntity<>("");
+        String urlPost = host;
+
+        ResponseEntity e2 = restTemplate.exchange(urlPost, HttpMethod.GET, entity, String.class);
+
+        System.out.println(e2);
+
+        return e2;
+    }
 }

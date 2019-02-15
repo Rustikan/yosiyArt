@@ -58,7 +58,7 @@ public class MainContoller {
 //        }
 
 
-//        final RestTemplate restTemplate = new RestTemplate();
+        final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         final HttpEntity<String> entity = new HttpEntity<>(restText);

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import intech.model.Employee;
 import intech.model.EmployeeAns;
 import intech.service.WorkExcellService;
-import intech.view.RepostEsiaView;
+import intech.view.ReportEsiaView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -42,8 +42,6 @@ public class MainContoller {
                                    @RequestParam(value = "host") String host,
                                    @RequestParam(value = "orgId") String orgId,
                                    @RequestParam(value = "rcOid", required = false) String rcOid,
-                                   @RequestParam(value = "login") String login,
-                                   @RequestParam(value = "password") String password,
                                    @RequestParam(value = "btnPostEmpl", required = false) String btnPostEmpl,
                                    @RequestParam(value = "btnPostToOrg", required = false) String btnPostToOrg
     ) {
@@ -58,7 +56,7 @@ public class MainContoller {
 //        }
 
 
-        final RestTemplate restTemplate = new RestTemplate();
+        restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         final HttpEntity<String> entity = new HttpEntity<>(restText);
@@ -115,7 +113,7 @@ public class MainContoller {
 
         ModelAndView model = new ModelAndView();
         model.addObject("empl", employees);
-        model.setView(new RepostEsiaView());
+        model.setView(new ReportEsiaView());
         //System.out.println("POST 1 8======>" + model);
         return model;
     }

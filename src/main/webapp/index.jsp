@@ -4,8 +4,8 @@
     <title>Йоська</title>
 </head>
 
-<script src="/static/js/jquery.min.js" type="text/javascript"></script>
-<script src="/static/js/xlsx.core.min.js" type="text/javascript"></script>
+<script src="/yosiay/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="/yosiay/static/js/xlsx.core.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     var prefix = '/yosiyArt_war';
     var fileName;
@@ -150,8 +150,8 @@
     <br>
     <br>
     <label> Хост: </label>
-    <input type="text" id="host" name="host" value="http://localhost:8081/yosiyArt_war"/>
-    <%--<input type="text" id="host" name="host" value="https://esia-portal1.test.gosuslugi.ru"/>--%>
+    <%--<input type="text" id="host" name="host" value="http://localhost:8081/yosiyArt_war"/>--%>
+    <input type="text" id="host" name="host" value="https://esia-portal1.test.gosuslugi.ru"/>
     <br>
     <br>
     <label>ИД организации</label>
@@ -160,14 +160,6 @@
     <br>
     <label>ИД ЦО</label>
     <input type="text" id="rcOid" name="rcOid" value="01"/>
-    <br>
-    <br>
-    <label>Логин:</label>
-    <input type="text" id="login" name="login" value="arinochkaselezneva@yandex.ru"/>
-    <br>
-    <br>
-    <label>Пароль:</label>
-    <input type="text" id="password" name="password" value="qwertyui12345"/>
     <br>
     <br>
     <div class="row">
@@ -183,9 +175,33 @@
     </div>
 </form>
 
-<form action="/yosiyArt_war/get" method="get">
+<form action="/yosiay/auth/getCode" method="get">
+    <label> Хост: </label>
+   <%-- <input type="text" id="hostGet" name="hostGet" value="http://localhost:8081/yosiyArt_war"/>--%>
 
     <input type="text" id="hostGet" name="hostGet" value="https://esia-portal1.test.gosuslugi.ru"/>
+
+    <br>
+    <br>
+    <label>AccessType:</label>
+    <input type="text" id="accessType" name="accessType" value="offline"/>
+   <br>
+    <br>
+    <label>Scope:</label>
+    <input type="text" id="scope" name="scope" value="snils"/>
+   <br>
+    <br>
+    <label> Мнемоника системы: </label>
+    <input type="text" id="client_id" name="client_id" value="771601"/>
+    <br>
+    <br>
+    <label> Обратный УРЛ: </label>
+    <input type="text" id="backUrl" name="backUrl" value=""/>
+    <br>
+    <br>
+    <label> Подпись: </label>
+    <input type="text" id="sign" name="sign" />
+    <br>
     <br>
     <div class="col-md-2 text-center">
         <input type="submit" class="btn btn-success" id="btnGetEmpl" name="btnGettEmpl"
@@ -193,5 +209,21 @@
     </div>
 </form>
 
+<form action="/yosiay/auth/getCode2" method="get">
+    <br>
+    <label>Authorization:</label>
+    <input type="text" id="bearer2" name="bearer2" value="Bearer 76d0d4ee-4edb-4366-b5ce-f168b1ee1c7f"/>
+    <br>
+    <br>
+    <label> Хост сервиса подписаний: </label>
+    <input type="text" id="hostSigner2" name="hostSigner2" value="http://10.4.116.20/bsb/crypto/sign/pkcs7"/>
+    <br>
+    <br>
+    <div class="col-md-2 text-center">
+        <input type="submit" class="btn btn-success" id="btnGetEmpl2" name="btnGettEmpl2"
+               value="Получить подпись"/>
+    </div>
+
+</form>
 </body>
 </html>

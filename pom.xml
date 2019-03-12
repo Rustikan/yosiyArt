@@ -12,6 +12,7 @@
         <javax.servlet>3.1.0</javax.servlet>
         <spring.version>4.3.9.RELEASE</spring.version>
         <jackson.version>2.7.8</jackson.version>
+        <oltu.oauth2.version>1.0.2</oltu.oauth2.version>
     </properties>
 
     <distributionManagement>
@@ -70,6 +71,37 @@
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>2.3.4.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>org.apache.oltu.oauth2.common</artifactId>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <version>${oltu.oauth2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.jwt</artifactId>
+            <version>${oltu.oauth2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.dynamicreg.client</artifactId>
+            <version>${oltu.oauth2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.dynamicreg.common</artifactId>
+            <version>${oltu.oauth2.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

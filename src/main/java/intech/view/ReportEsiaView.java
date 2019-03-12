@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by Valeev-RN on 12.02.2019.
  */
-public class RepostEsiaView extends AbstractXlsxView {
+public class ReportEsiaView extends AbstractXlsxView {
     @Override
     protected void buildExcelDocument(Map<String, Object> map, Workbook workbook, HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         //response.setContentType("application/vnd.ms-excel");
@@ -66,7 +66,6 @@ public class RepostEsiaView extends AbstractXlsxView {
 
         row = sheet.createRow(2);
         cell = row.createCell(0);
-        cell.setCellValue("Из них не загружено: ");
 
         cell = row.createCell(1);
         cell.setCellValue(notLoad);
